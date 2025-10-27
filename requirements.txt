@@ -1,0 +1,4 @@
+Flask
+openpyxl
+num2words
+gunicorn
