@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 Stop Billing Software</title>
+    
+    <script src="/static/app.js" defer></script>
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f4f4f4; 
+        }
+        .container { 
+            max-width: 900px; 
+            margin: auto; 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        img.logo { 
+            max-width: 300px; 
+            height: 100px;
+            object-fit: contain;
+            display: block; 
+            margin: 0 auto 10px; 
+        }
+        .menu-bar { 
+            margin-bottom: 20px; 
+            text-align: center; 
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        .menu-bar button { 
+            padding: 10px 15px; 
+            margin: 0 5px; 
+            cursor: pointer; 
+            background: #e9e9e9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .menu-bar button:disabled {
+            background: #f9f9f9;
+            color: #aaa;
+        }
+        
+        fieldset { 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+        }
+        legend { 
+            font-weight: bold; 
+            padding: 0 10px; 
+            font-size: 1.1em;
+        }
+        
+        /* This creates the 2-column layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px;
+        }
+        .form-group { 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .form-group label { 
+            margin-bottom: 5px; 
+            font-size: 0.9em; 
+            color: #333;
+        }
+        .form-group input { 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-size: 1em;
+        }
+        
+        /* This styles the 'Add Items' section */
+        .item-entry-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr 0.7fr 0.7fr 0.7fr auto;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .item-entry-grid button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        /* This styles the item table (your Treeview) */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { 
+            background: #f9f9f9; 
+            font-size: 0.9em;
+        }
+        #item-table-body td {
+            font-size: 0.95em;
+        }
+        
+        /* This styles the Save/Clear buttons */
+        .action-buttons { 
+            text-align: center; 
+            margin-top: 20px; 
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        .action-buttons button { 
+            padding: 12px 25px; 
+            font-size: 1.1em; 
+            margin: 0 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #save-invoice-btn {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="/static/logo.png" alt="Logo" class="logo" 
+             onerror="this.style.display='none'"> <div class="menu-bar">
+            <button id="btn-invoice">New Invoice</button>
+            <button id="btn-quotation">New Quotation</button>
+            <button id="btn-search">Search Invoice</button>
+        </div>
+
+        <div id="invoice-frame">
+            
+            <fieldset>
+                <legend>Invoice & Customer Details</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="inv-num">Invoice Number:</label>
+                        <input type="text" id="inv-num">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-date">Invoice Date (YYYY-MM-DD):</label>
+                        <input type="text" id="inv-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-name">Customer Name:</label>
+                        <input type="text" id="cust-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-addr">Customer Address:</label>
+                        <input type="text" id="cust-addr">
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-phone">Customer Phone:</label>
+                        <input type="text" id="cust-phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-num">Order Number:</label>
+                        <input type="text" id="order-num">
+                    </div>
+                    <div class="form-group">
+                        <label for="order-date">Order Date (YYYY-MM-DD):</label>
+                        <input type="text" id="order-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="bill-type">Bill Type (e.g., Original):</label>
+                        <input type="text" id="bill-type">
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-gstin">Customer GSTIN:</label>
+                        <input type="text" id="cust-gstin">
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-state">State Name:</label>
+                        <input type="text" id="cust-state">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Add Items</legend>
+                <div class="item-entry-grid">
+                    <div class="form-group">
+                        <label for="item-desc">Description:</label>
+                        <input type="text" id="item-desc">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-hsn">HSN/SAC:</label>
+                        <input type="text" id="item-hsn">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-qty">Quantity:</label>
+                        <input type="number" id="item-qty" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-cost">Rate (Cost):</label>
+                        <input type="number" id="item-cost" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-gst">Total GST (%):</label>
+                        <input type="number" id="item-gst" step="any">
+                    </div>
+                    <button id="add-item-btn">Add Item</button>
+                </div>
+            </fieldset>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>HSN/SAC</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>GST (%)</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="item-table-body">
+                    </tbody>
+            </table>
+
+            <div class="action-buttons">
+                <button id="save-invoice-btn">Save Invoice</button>
+                <button id="clear-all-btn">Clear All</button>
+            </div>
+
+        </div>
+    </div> </body>
+</html>
